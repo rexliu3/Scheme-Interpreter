@@ -42,7 +42,7 @@ def scheme_eval(expr, env, _=None):  # Optional third argument is ignored
         validate_procedure(the_operator)
         helper = lambda exprs: scheme_eval(exprs, env)
         the_operands = rest.map(helper)
-        return the_operator.apply(the_operands, env)
+        return scheme_apply(the_operator, the_operands, env)
         # END PROBLEM 4
 
 
@@ -388,11 +388,11 @@ def do_and_form(expressions, env):
     "*** YOUR CODE HERE ***"
     last = True
     while expressions is not nil:
-        if is_false_primitive(expressions.first):
+        last = scheme_eval(expressions.first, env)
+        if is_false_primitive(last):
             return False
-        last = expressions.first
         expressions = expressions.rest
-    return scheme_eval(last, env)
+    return last
 
     # END PROBLEM 12
 
@@ -413,8 +413,9 @@ def do_or_form(expressions, env):
     # BEGIN PROBLEM 12
     "*** YOUR CODE HERE ***"
     while expressions is not nil:
-        if is_true_primitive(expressions.first):
-            return expressions.first
+        result = scheme_eval(expressions.first, env)
+        if is_true_primitive(result):
+            return result
         expressions = expressions.rest
     return False
     # END PROBLEM 12
@@ -468,17 +469,23 @@ def make_let_frame(bindings, env):
     # BEGIN PROBLEM 14
     "*** YOUR CODE HERE ***"
     used_names = []
+    '''print(bindings)
+    print(bindings.first)
+    print(bindings.first.first)
+    print(bindings.first.rest.first)'''
     while bindings is not nil:
-        validate_formals(bindings.first.first)
         validate_form(bindings.first, 1, 2)
         if bindings.first.first in used_names:
             raise SchemeError
         else:
+            if not bindings.first.rest:
+                raise SchemeError
             names = Pair(bindings.first.first, names)
             values = Pair(scheme_eval(bindings.first.rest.first, env), values)
             used_names.append(bindings.first.first)
         bindings = bindings.rest
     # END PROBLEM 14
+    validate_formals(names)
     return env.make_child_frame(names, values)
 
 

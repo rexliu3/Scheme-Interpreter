@@ -6,7 +6,21 @@
 ; Some utility functions that you may find useful to implement
 
 (define (zip pairs)
-  'replace-this-line)
+    ; zipper is a one-arguement function that takes in a list and returns first element
+    (define zipper (lambda (listy) (car listy)))
+
+    ; zipper 2 is a one-arguement function that takes in a list and returns without first element
+    (define zipper2 (lambda (listy) (cdr listy)))
+
+    ; helper recurses: map(zipper) and then map(zipper2) until empty
+    (define (helper pairs)
+        (cond ((null? pairs) nil)
+              ((null? (car pairs)) nil)
+              (else (cons (map zipper pairs) (helper (map zipper2 pairs))))
+              )
+        )
+    (helper pairs)
+  )
 
 
 ;; Problem 15
@@ -38,13 +52,14 @@
 ;; the merged lists.
 (define (merge comp list1 list2)
   (cond
-        ((or (null? list1) (null? list2)) nil)
+        ((and (null? list1) (null? list2)) nil)
+        ((null? list1) (cons (car list2) (merge comp list1 (cdr list2))))
+        ((null? list2) (cons (car list1) (merge comp (cdr list1) list2)))
         ((comp (car list1) (car list2)) (cons (car list1) (merge comp (cdr list1) list2)))
         (else (cons (car list2) (merge comp list1 (cdr list2))))
         )
 
   )
-  ; END PROBLEM 16
 
 
 (merge < '(1 5 7 9) '(4 8 10))
@@ -54,44 +69,14 @@
 
 ;; Problem 17
 
-(define (nondecreaselist1 s)
-  (define (helper next s)
-    ((cond
-       ((null? (cdr s))
-        (list s)
-       )
-       ((> (car (cdr s)) (car s))
-        (append (car s) (car (cdr s)))
-       )
-       (()
-       )
-     )
-    )
-  )
-  (helper (car s) s)
-)
-
-(define (nondecreaselist2 s)
-  (cond
-    ((null? s) nil)
-    ((<= (car s) (cadr s))
-     (cons (car s) (nondecreaselist (cdr s)))
-    )
-    ((> (car s) (cadr s))
-     (list (car s) (cons (cadr s) (nondecreaselist (cddr s))))
-    )
-  )
-)
-
 (define (nondecreaselist s)
-
     ; return first section
   (define (helper1 s)
         (cond
               ((null? s) nil)
-              ((null? (cdr s)) (car s))
-              ((> (car s) (cadr s)) (car s))
-              (else (cons (car s) (cons (helper1 (cdr s)) nil)))
+              ((null? (cdr s)) (cons(car s) nil))
+              ((> (car s) (cadr s)) (cons (car s) nil))
+              (else (cons (car s) (helper1 (cdr s))))
               )
       )
 
@@ -99,6 +84,7 @@
   (define (helper3 s)
           (cond
               ((null? s) nil)
+              ((null? (cdr s)) nil)
               ((null? (cdr s)) s)
               ((> (car s) (cadr s)) (cdr s))
               (else (helper3 (cdr s)))
