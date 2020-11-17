@@ -114,37 +114,54 @@
 (define quoted? (check-special 'quote))
 (define let?    (check-special 'let))
 
-;; Converts all let special forms in EXPR into equivalent forms using lambda
+; ; Converts all let special forms in EXPR into equivalent forms using lambda
 (define (let-to-lambda expr)
-  (cond ((atom? expr)
-         ; BEGIN PROBLEM EC
-         'replace-this-line
-         ; END PROBLEM EC
-         )
-        ((quoted? expr)
-         ; BEGIN PROBLEM EC
-         'replace-this-line
-         ; END PROBLEM EC
-         )
-        ((or (lambda? expr)
-             (define? expr))
-         (let ((form   (car expr))
-               (params (cadr expr))
-               (body   (cddr expr)))
-           ; BEGIN PROBLEM EC
-           'replace-this-line
-           ; END PROBLEM EC
-           ))
-        ((let? expr)
-         (let ((values (cadr expr))
-               (body   (cddr expr)))
-           ; BEGIN PROBLEM EC
-           'replace-this-line
-           ; END PROBLEM EC
-           ))
-        (else
-         ; BEGIN PROBLEM EC
-         'replace-this-line
-         ; END PROBLEM EC
-         )))
+    (display expr)
+    (display "------------")
+  (cond
+    ((atom? expr)
+     ; BEGIN PROBLEM EC
+     (expr)
+     ; END PROBLEM EC
+    )
+    ((quoted? expr)
+     ; BEGIN PROBLEM EC
+     (expr)
+     ; END PROBLEM EC
+    )
+    ((or (lambda? expr) (define? expr))
+        ;(lambda (listy) (car listy))
+     (let ((form (car expr))
+           (params (cadr expr))
+           (body (cddr expr))
+          )
+       ; BEGIN PROBLEM EC
+       (display '(form (params) body))
+       (display "------------")
+       '(form (params) body)
+       ; END PROBLEM EC
+     )
+    )
+    ((let? expr)
+     (let ((values (cadr expr))
+           (body (cddr expr))
+          )
+       ; BEGIN PROBLEM EC
+       `((lambda ,(car (zip values)) ,(let-to-lambda body) ,(cadr (zip values))))
+       ; END PROBLEM EC
+     )
+    )
+    (else
+     ; BEGIN PROBLEM EC
+     (display expr)
+     (display "------------")
+     `(,(map let-to-lambda expr))
+     ; END PROBLEM EC
+    )
+  )
+)
+
+(let-to-lambda '(let ((a 1) (b 2)) (+ a b)))
+(let-to-lambda '(let ((a 1)) (let ((b a)) b)))
+
 
