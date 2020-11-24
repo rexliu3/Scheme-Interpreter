@@ -126,25 +126,25 @@
   (cond 
     ((atom? expr)
      ; BEGIN PROBLEM EC
-     (expr)
+     expr
      ; END PROBLEM EC
     )
     ((quoted? expr)
      ; BEGIN PROBLEM EC
-     (list '(car expr)
-           (let-to-lambda (cadr expr))
-           (let-to-lambda (car (cddr expr)))
-     )
+     expr
      ; END PROBLEM EC
     )
     ((or (lambda? expr) (define? expr))
-     ; (lambda (listy) (car listy))
      (let ((form (car expr))
            (params (cadr expr))
            (body (cddr expr))
+           (big_expr (let-to-lambda (cddr expr)))
           )
        ; BEGIN PROBLEM EC
-       '(form (params) body)
+        (cond 
+          ((list? (cadr big_expr)) (append (list form params) big_expr))
+          (else (list form params big_expr))
+          )
        ; END PROBLEM EC
      )
     )
@@ -153,17 +153,22 @@
            (body (cddr expr))
           )
        ; BEGIN PROBLEM EC
-       ((lambda (car (zip values))
-           (let-to-lambda body)
-           (cadr (zip values))
-         )
+       (cons (list 'lambda (car (zip values))
+           (let-to-lambda (car body)))
+           (map let-to-lambda (cadr (zip values)))
         )
        ; END PROBLEM EC
      )
     )
     (else
      ; BEGIN PROBLEM EC
-     ((map let-to-lambda expr))
+      (cond 
+        ((null? (cdr expr)) (let-to-lambda (car expr)))
+        (else (cons (let-to-lambda (car expr))
+          (map let-to-lambda (cdr expr))
+        ))
+      )
+     
      ; END PROBLEM EC
     )
   )
@@ -172,3 +177,13 @@
 ;(let-to-lambda '(let((a 1) (b 2))(+ a b)))
 
 ;(let-to-lambda '(let((a 1))(let((b a))b)))
+
+(let-to-lambda 
+  '(let
+    (
+      (a (let ((a 2)) a))
+      (b 2)
+    )
+    (+ a b)
+  )
+)
