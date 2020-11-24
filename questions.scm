@@ -6,21 +6,28 @@
 ; Some utility functions that you may find useful to implement
 
 (define (zip pairs)
-    ; zipper is a one-arguement function that takes in a list and returns first element
-    (define zipper (lambda (listy) (car listy)))
-
-    ; zipper 2 is a one-arguement function that takes in a list and returns without first element
-    (define zipper2 (lambda (listy) (cdr listy)))
-
-    ; helper recurses: map(zipper) and then map(zipper2) until empty
-    (define (helper pairs)
-        (cond ((null? pairs) nil)
-              ((null? (car pairs)) nil)
-              (else (cons (map zipper pairs) (helper (map zipper2 pairs))))
-              )
-        )
-    (helper pairs)
+  ; zipper is a one-arguement function that takes in a list and returns first element
+  (define zipper (lambda (listy) (car listy)))
+  ; zipper 2 is a one-arguement function that takes in a list and returns without first element
+  (define zipper2 (lambda (listy) (cdr listy)))
+  ; helper recurses: map(zipper) and then map(zipper2) until empty
+  (define (helper pairs)
+    (cond 
+      ((null? pairs)
+       nil
+      )
+      ((null? (car pairs))
+       nil
+      )
+      (else
+       (cons (map zipper pairs)
+             (helper (map zipper2 pairs))
+       )
+      )
+    )
   )
+  (helper pairs)
+)
 
 
 ;; Problem 15
@@ -116,9 +123,7 @@
 
 ; ; Converts all let special forms in EXPR into equivalent forms using lambda
 (define (let-to-lambda expr)
-    (display expr)
-    (display "------------")
-  (cond
+  (cond 
     ((atom? expr)
      ; BEGIN PROBLEM EC
      (expr)
@@ -126,18 +131,19 @@
     )
     ((quoted? expr)
      ; BEGIN PROBLEM EC
-     (expr)
+     (list '(car expr)
+           (let-to-lambda (cadr expr))
+           (let-to-lambda (car (cddr expr)))
+     )
      ; END PROBLEM EC
     )
     ((or (lambda? expr) (define? expr))
-        ;(lambda (listy) (car listy))
+     ; (lambda (listy) (car listy))
      (let ((form (car expr))
            (params (cadr expr))
            (body (cddr expr))
           )
        ; BEGIN PROBLEM EC
-       (display '(form (params) body))
-       (display "------------")
        '(form (params) body)
        ; END PROBLEM EC
      )
@@ -147,21 +153,22 @@
            (body (cddr expr))
           )
        ; BEGIN PROBLEM EC
-       `((lambda ,(car (zip values)) ,(let-to-lambda body) ,(cadr (zip values))))
+       ((lambda (car (zip values))
+           (let-to-lambda body)
+           (cadr (zip values))
+         )
+        )
        ; END PROBLEM EC
      )
     )
     (else
      ; BEGIN PROBLEM EC
-     (display expr)
-     (display "------------")
-     `(,(map let-to-lambda expr))
+     ((map let-to-lambda expr))
      ; END PROBLEM EC
     )
   )
 )
 
-(let-to-lambda '(let ((a 1) (b 2)) (+ a b)))
-(let-to-lambda '(let ((a 1)) (let ((b a)) b)))
+;(let-to-lambda '(let((a 1) (b 2))(+ a b)))
 
-
+;(let-to-lambda '(let((a 1))(let((b a))b)))
