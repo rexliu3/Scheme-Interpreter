@@ -34,7 +34,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 <p align="center">
-  <img width="400" height="300" src="images/screenshot.png">
+  <img width="700" height="300" src="images/screenshot.png">
 </p>
 
 Python program that interprets the Scheme coding language. Given any Scheme code input, the program will display the corresponding output.
