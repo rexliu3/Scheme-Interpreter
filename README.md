@@ -30,7 +30,6 @@
 </details>
 
 
-
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 <p align="center">
@@ -43,6 +42,7 @@ Python program that interprets the Scheme coding language. Given any Scheme code
 ### Built With
 * [Python](https://www.python.org/)
 
+
 ## Getting Started
 ### Prerequisites
 * Python
@@ -51,29 +51,25 @@ Python program that interprets the Scheme coding language. Given any Scheme code
   ```
 
 ### Installation
-
 1. Clone the repo
    ```sh
    git clone https://github.com/rexliu3/Scheme-Interpreter.git
    ```
 
+
 <!-- USAGE EXAMPLES -->
 ## Usage
-
 Simply run `scheme.py`: ``` python3 scheme.py ```
 * Type Scheme code in the terminal and the interpreter will generate the corresponding outputs
 
 
 <!-- ROADMAP -->
 ## Roadmap
-
 See the [open issues](https://github.com/rexliu3/Scheme-Interpreter/issues) for a list of proposed features (and known issues).
-
 
 
 <!-- CONTRIBUTING -->
 ## Contributing
-
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 1. Fork the Project
@@ -83,13 +79,12 @@ Contributions are what make the open source community such an amazing place to b
 5. Open a Pull Request
 
 
-
 <!-- CONTACT -->
 ## Contact
-
 Rex Liu - rexliu3@berkeley.edu
 
 Project Link: [https://github.com/rexliu3/Scheme-Interpreter](https://github.com/rexliu3/Scheme-Interpreter)
+
 
 ## Acknowledgements
 Built as Project in Computer Science Course [CS61A: Structure and Interpretation of Computer Programs](https://cs61a.org/) at the University of California, Berkeley
