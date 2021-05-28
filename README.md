@@ -36,8 +36,7 @@
   <img width="700" height="300" src="images/screenshot.png">
 </p>
 
-Python program that interprets the Scheme coding language. Given any Scheme code input, the program will display the corresponding output.
-* Features procedures, name binding, environments, etc.
+Python program that interprets the Scheme coding language. Given any Scheme code input, the program will display the corresponding output. Features procedures, name binding, environments, etc.
 
 ### Built With
 * [Python](https://www.python.org/)
